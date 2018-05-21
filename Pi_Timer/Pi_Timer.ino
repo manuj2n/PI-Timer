@@ -1,16 +1,16 @@
 
-const int ledPin =  13;      // the number of the LED pin
+const int cmdPiPin =  2;      // the number of the LED pin
 
 // Variables will change:
-int ledState = LOW;             // ledState used to set the LED
+int piState = LOW;             // ledState used to set the LED
 long previousMillis = 0;        // will store last time LED was updated
 
 // the follow variables is a long because the time, measured in miliseconds,
 // will quickly become a bigger number than can be stored in an int.
-long interval = 1000;           // interval at which to blink (milliseconds)
+long interval = 20;           // interval at which to blink (milliseconds)
 
 void setup() {
-  pinMode(ledPin, OUTPUT);      
+  pinMode(cmdPiPin, OUTPUT);      
 }
 
 void loop()
@@ -18,17 +18,17 @@ void loop()
 
   unsigned long currentMillis = millis();
  
-  if(currentMillis - previousMillis > interval) {
+  if(currentMillis - previousMillis > (interval * 1000)) {
     // save the last time you blinked the LED 
-    previousMillis = currentMillis;   
+    previousMillis = currentMillis;
 
-    // if the LED is off turn it on and vice-versa:
-    if (ledState == LOW)
-      ledState = HIGH;
+    // if the PI is off turn it on and vice-versa:
+    if (piState == LOW)
+      piState = HIGH;
     else
-      ledState = LOW;
+      piState = LOW;
 
-    // set the LED with the ledState of the variable:
-    digitalWrite(ledPin, ledState);
+    // set the PI with the ledState of the variable:
+    digitalWrite(cmdPiPin, piState);
   }
 }
