@@ -7,7 +7,7 @@ long previousMillis = 0;        // will store last time LED was updated
 
 // the follow variables is a long because the time, measured in miliseconds,
 // will quickly become a bigger number than can be stored in an int.
-long interval = 20;           // interval at which to blink (milliseconds)
+long interval = 20000;           // interval at which to blink (milliseconds)
 
 void setup() {
   pinMode(cmdPiPin, OUTPUT);      
@@ -18,7 +18,7 @@ void loop()
 
   unsigned long currentMillis = millis();
  
-  if(currentMillis - previousMillis > (interval * 1000)) {
+  if(currentMillis - previousMillis > (interval)) {
     // enregistre le compteur avec l'interval prevu'
     previousMillis = currentMillis;
 
