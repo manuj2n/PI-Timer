@@ -19,7 +19,7 @@ void loop()
   unsigned long currentMillis = millis();
  
   if(currentMillis - previousMillis > (interval * 1000)) {
-    // save the last time you blinked the LED 
+    // enregistre le compteur avec l'interval prevu'
     previousMillis = currentMillis;
 
     // if the PI is off turn it on and vice-versa:
