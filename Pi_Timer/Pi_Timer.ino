@@ -23,7 +23,8 @@ void setup() {
   Serial.begin(9600);
   // reserve 200 bytes for the inputString:
   bufferString.reserve(200);
-  
+  delay(1000);
+  digitalWrite(outUSB, HIGH);
 }
 
 void loop()
