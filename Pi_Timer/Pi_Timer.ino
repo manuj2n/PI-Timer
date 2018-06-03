@@ -1,5 +1,3 @@
-
-
 const int outUSB =  2;      // Sortie commande mosfet usb raspberry
 const int outShutdown = 4;    // ligue IO vers raspberry
 const int outLed = 5;          // led debug
@@ -30,11 +28,11 @@ void setup() {
 void loop()
 {
   // if the PI is off turn it on and vice-versa:
-  if (piState == LOW){
+  /* if (piState == LOW){
     piState = HIGH;
   } else {
     piState = LOW;      
-  }
+  } */
   
   if (bufferFull) {
     digitalWrite(outLed,HIGH);
@@ -47,11 +45,12 @@ void loop()
 }
 
 void serialEvent() {
-  while (Serial.available()) {
-    char inChar = (char)Serial.read(); 
-    bufferString += inChar;
-    if (inChar == '\n') {
-      bufferFull = true;
-    } 
-  }
+    while (Serial.available()) {
+        char inChar = (char)Serial.read(); 
+        bufferString += inChar;
+        if (inChar == '\n') {
+            String
+            bufferFull = true;
+        } 
+    }
 }
