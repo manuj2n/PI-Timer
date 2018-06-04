@@ -5,9 +5,9 @@ const int inRaspberry = 3;     //ligne IO venant du raspberry
 
 String bufferString = "";         // a string to hold incoming data
 boolean bufferFull = false;  // whether the string is complete
+String strSecondes="";
 
-int piState = LOW;             // etat raspberry
-unsigned long tempsVeille = 300;
+long tempsVeille = 300;
 
 void setup() {
   pinMode(outUSB, OUTPUT);
@@ -19,37 +19,34 @@ void setup() {
   pinMode(inRaspberry, INPUT);
   // initialize serial:
   Serial.begin(9600);
-  // reserve 200 bytes for the inputString:
-  bufferString.reserve(200);
+  // reserve 20 bytes for the inputString:
+  bufferString.reserve(20);
   delay(1000);
   digitalWrite(outUSB, HIGH);
 }
 
 void loop()
 {
-  // if the PI is off turn it on and vice-versa:
-  /* if (piState == LOW){
-    piState = HIGH;
-  } else {
-    piState = LOW;      
-  } */
-  
   if (bufferFull) {
     digitalWrite(outLed,HIGH);
     delay(1000);
     digitalWrite(outLed,LOW);  
+    tempsVeille = strSecondes.toInt();
+    
+
     bufferString = "";
+    strSecondes = "";
     bufferFull = false;
   }
    
 }
 
 void serialEvent() {
-    while (Serial.available()) {
+    while (Serial.available()) {     
         char inChar = (char)Serial.read(); 
         bufferString += inChar;
-        if (inChar == '\n') {
-            String
+        if ((bufferString.charAt(bufferString.length()-1) == '\n') && (bufferString.charAt(0) == 'S') && (bufferString.charAt(4) == ':')) {
+            strSecondes = bufferString.substring(4,bufferString.length()-1);
             bufferFull = true;
         } 
     }
