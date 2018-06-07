@@ -7,7 +7,7 @@ String bufferString = "";         // a string to hold incoming data
 boolean bufferFull = false;  // whether the string is complete
 String strSecondes="";
 
-long tempsVeille = 300;
+long tempsVeille = 300L;
 
 void setup() {
   pinMode(outUSB, OUTPUT);
@@ -19,11 +19,14 @@ void setup() {
   pinMode(inRaspberry, INPUT);
   // initialize serial:
   Serial.begin(9600);
-  // reserve 20 bytes for the inputString:
   bufferString.reserve(20);
   strSecondes.reserve(20);
   delay(1000);
   digitalWrite(outUSB, HIGH);
+
+  strSecondes = "846";
+  bufferFull = true;
+  Serial.write("debut du programme\n");
 }
 
 void loop()
@@ -32,13 +35,19 @@ void loop()
     digitalWrite(outLed,HIGH);
     delay(1000);
     digitalWrite(outLed,LOW);  
-    tempsVeille = strSecondes.toInt();
-    for (int i=strSecondes.length(); i >=1; i--){
-      char mult = strSecondes.charAt(i) - 48;    
-      tempsVeille += pow(mult,i);
+    tempsVeille = 0;
+    //for (int i=(strSecondes.length()); i >=1; i--){
+    for (int i=1; i<=(strSecondes.length()); i++){
+      float mult = strSecondes.charAt((strSecondes.length())-(i)) - 48;    
+      tempsVeille += long(mult * pow(10.0,float(i-1)));
+      Serial.print(i-1);
+      Serial.print(" ");
+      Serial.print(mult);
+      Serial.print(" ");
+      Serial.println(tempsVeille);
     }
 
-    Serial.write(tempsVeille);
+    Serial.println(tempsVeille);
     
     bufferString = "";
     strSecondes = "";
