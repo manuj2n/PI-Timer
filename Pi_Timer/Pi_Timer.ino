@@ -21,6 +21,7 @@ void setup() {
   Serial.begin(9600);
   // reserve 20 bytes for the inputString:
   bufferString.reserve(20);
+  strSecondes.reserve(20);
   delay(1000);
   digitalWrite(outUSB, HIGH);
 }
@@ -32,13 +33,17 @@ void loop()
     delay(1000);
     digitalWrite(outLed,LOW);  
     tempsVeille = strSecondes.toInt();
-    
+    for (int i=strSecondes.length(); i >=1; i--){
+      char mult = strSecondes.charAt(i) - 48;    
+      tempsVeille += pow(mult,i);
+    }
 
+    Serial.write(tempsVeille);
+    
     bufferString = "";
     strSecondes = "";
     bufferFull = false;
   }
-   
 }
 
 void serialEvent() {
