@@ -7,7 +7,7 @@ String bufferString = "";         // a string to hold incoming data
 boolean bufferFull = false;  // whether the string is complete
 String strSecondes="";
 
-long tempsVeille = 0L;
+long tempsVeille = 0;
 
 void setup() {
   pinMode(outUSB, OUTPUT);
@@ -25,7 +25,7 @@ void setup() {
   digitalWrite(outUSB, HIGH);
 
   /* DEBUG */
-  //strSecondes = "100";
+  //strSecondes = "300";
   //bufferFull = true;
   //Serial.write("debut du programme\n");
 }
@@ -35,27 +35,30 @@ void loop()
   delay(25); 
   if (bufferFull) {
     tempsVeille = 0L;
-    for (int i=1; i<=(strSecondes.length()); i++){
+    for (int i=1; i<=(strSecondes.length() - 1); i++){
       int mult = strSecondes.charAt((strSecondes.length())-(i)) - 48;
       long tmp = (mult * pow(10.0,(i-1)));    
       tempsVeille += tmp;
       /* DEBUG */
-      //Serial.print(pow(10.0,(i-1)));
-      //Serial.print(" ");
-      //Serial.print(mult);
-      //Serial.print(" ");
-      //Serial.println(tmp);
+      Serial.print(pow(10.0,(i-1)));
+      Serial.print(" ");
+      Serial.print(mult);
+      Serial.print(" ");
+      Serial.println(tmp);
     }
- 
+    Serial.print("strSecondes : ");
+    Serial.println(strSecondes);
     tempsVeille -= 30; // rattrappe le shutdown
     Serial.print("DEBUT VEILLE : ");
     Serial.println(tempsVeille);
     delay(30000); // attend 30s le shutdown 
     digitalWrite(outLed,HIGH);
-    digitalWrite(outUSB, LOW);    
+    digitalWrite(outUSB, LOW);
+    unsigned long departMillis = millis();    
     unsigned long courantMillis = millis()+1;
-    unsigned long departMillis = millis();
+
     while (courantMillis - departMillis <= tempsVeille * 1000) {
+      delay(25);
       courantMillis = millis();     
     }
     
@@ -64,7 +67,6 @@ void loop()
     digitalWrite(outUSB, HIGH);
     digitalWrite(outLed,LOW);  
  
-    bufferString = "";
     strSecondes = "";
     bufferFull = false;
   }
@@ -76,6 +78,7 @@ void serialEvent() {
         bufferString += inChar;
         if ((bufferString.charAt(bufferString.length()-1) == '\n') && (bufferString.charAt(0) == 'S') && (bufferString.charAt(4) == ':')) {
             strSecondes = bufferString.substring(4,bufferString.length()-1);
+            bufferString = "";
             bufferFull = true;
         } 
     }
