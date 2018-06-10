@@ -7,7 +7,7 @@ String bufferString = "";         // a string to hold incoming data
 boolean bufferFull = false;  // whether the string is complete
 String strSecondes="";
 
-long tempsVeille = 300L;
+long tempsVeille = 0L;
 
 void setup() {
   pinMode(outUSB, OUTPUT);
@@ -24,31 +24,46 @@ void setup() {
   delay(1000);
   digitalWrite(outUSB, HIGH);
 
-  strSecondes = "846";
-  bufferFull = true;
-  Serial.write("debut du programme\n");
+  /* DEBUG */
+  //strSecondes = "100";
+  //bufferFull = true;
+  //Serial.write("debut du programme\n");
 }
 
 void loop()
 {
+  delay(25); 
   if (bufferFull) {
-    digitalWrite(outLed,HIGH);
-    delay(1000);
-    digitalWrite(outLed,LOW);  
-    tempsVeille = 0;
-    //for (int i=(strSecondes.length()); i >=1; i--){
+    tempsVeille = 0L;
     for (int i=1; i<=(strSecondes.length()); i++){
-      float mult = strSecondes.charAt((strSecondes.length())-(i)) - 48;    
-      tempsVeille += long(mult * pow(10.0,float(i-1)));
-      Serial.print(i-1);
-      Serial.print(" ");
-      Serial.print(mult);
-      Serial.print(" ");
-      Serial.println(tempsVeille);
+      int mult = strSecondes.charAt((strSecondes.length())-(i)) - 48;
+      long tmp = (mult * pow(10.0,(i-1)));    
+      tempsVeille += tmp;
+      /* DEBUG */
+      //Serial.print(pow(10.0,(i-1)));
+      //Serial.print(" ");
+      //Serial.print(mult);
+      //Serial.print(" ");
+      //Serial.println(tmp);
     }
-
+ 
+    tempsVeille -= 30; // rattrappe le shutdown
+    Serial.print("DEBUT VEILLE : ");
     Serial.println(tempsVeille);
+    delay(30000); // attend 30s le shutdown 
+    digitalWrite(outLed,HIGH);
+    digitalWrite(outUSB, LOW);    
+    unsigned long courantMillis = millis()+1;
+    unsigned long departMillis = millis();
+    while (courantMillis - departMillis <= tempsVeille * 1000) {
+      courantMillis = millis();     
+    }
     
+    Serial.println("FIN VEILLE");
+
+    digitalWrite(outUSB, HIGH);
+    digitalWrite(outLed,LOW);  
+ 
     bufferString = "";
     strSecondes = "";
     bufferFull = false;
