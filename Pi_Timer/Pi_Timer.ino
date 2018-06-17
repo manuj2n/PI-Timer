@@ -40,11 +40,11 @@ void loop()
       long tmp = (mult * pow(10.0,(i-1)));    
       tempsVeille += tmp;
       /* DEBUG */
-      Serial.print(pow(10.0,(i-1)));
-      Serial.print(" ");
-      Serial.print(mult);
-      Serial.print(" ");
-      Serial.println(tmp);
+      //Serial.print(pow(10.0,(i-1)));
+      //Serial.print(" ");
+      //Serial.print(mult);
+      //Serial.print(" ");
+      //Serial.println(tmp);
     }
     Serial.print("strSecondes : ");
     Serial.println(strSecondes);
